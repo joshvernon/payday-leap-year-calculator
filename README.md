@@ -1,7 +1,7 @@
 # 27pdyc
 27 payday year calculator
 
-When run as a script `calculator.py` will print the 27 payday years from 2018 to 2068. Here is that output:
+Example output running `calculator.py` with the payday Thursday, January 11, 2018, for the years 2018 to 2068:
 ```
 2018 is a 27 payday year: False
 2019 is a 27 payday year: False
