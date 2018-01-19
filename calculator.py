@@ -4,8 +4,8 @@ def is_27_payday_year(year, payday):
     """Determine if a given year is a 27 payday year.
 
     Determine if a given year is a 27 payday year, based on the given
-    payday on a biweekly pay calendar. Assumes paychecks are allowed
-    to be disbursed on New Year's Day.
+    payday on a biweekly pay calendar. Assumes paychecks are disbursed
+    on holidays.
 
     Args:
         year (int): The year we're testing.
