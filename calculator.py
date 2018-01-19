@@ -29,6 +29,7 @@ def is_27_payday_year(year, payday):
 
 if __name__ == '__main__':
     year = 2018
+    # January 11, 2018
     payday = date(2018, 1, 11)
     for i in range(51):
         print("{0} is a 27 payday year: {1}".format(
