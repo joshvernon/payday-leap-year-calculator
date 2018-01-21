@@ -110,3 +110,4 @@ venv.bak/
 # Project-specific ignores
 .vscode
 *.code-workspace
+local_*.py
