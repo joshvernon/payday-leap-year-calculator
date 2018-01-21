@@ -1,7 +1,9 @@
 # 27pdyc
 27 payday year calculator - more info on the "pay period leap year" can be found [here](https://www.wagehourinsights.com/2014/12/the-pay-period-leap-year-handling-an-extra-pay-period-in-2015/)
+The calculator can handle both weekly and biweekly pay calendars.
 
-Example output running `calculator.py` with the payday Thursday, January 11, 2018, for the years 2018 to 2068:
+### Example Output
+Payday leap years from 2018 to 2068 on a biweekly pay calendar, where Janurary 11, 2018 is a payday:
 ```
 2018 is a 27 payday year: False
 2019 is a 27 payday year: False
