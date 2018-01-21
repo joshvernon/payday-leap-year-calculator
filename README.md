@@ -1,5 +1,5 @@
 # 27pdyc
-27 payday year calculator - more info on the "pay period leap year" can be found [here](https://www.wagehourinsights.com/2014/12/the-pay-period-leap-year-handling-an-extra-pay-period-in-2015/)
+27 payday year calculator - more info on the "pay period leap year" can be found [here](https://www.wagehourinsights.com/2014/12/the-pay-period-leap-year-handling-an-extra-pay-period-in-2015/).  
 The calculator can handle both weekly and biweekly pay calendars.
 
 ### Example Output
