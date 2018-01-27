@@ -5,8 +5,6 @@ from calculator import is_payday_leap_year
 
 class CalculatorTestCase(unittest.TestCase):
 
-    # Testing VSCode git connectivity
-
     def test_thursday_2018_is_false(self):
         payday = date(2018, 1, 11)
         self.assertFalse(is_payday_leap_year(2018, payday))
