@@ -19,13 +19,14 @@ def is_payday_leap_year(year, payday, frequency='biweekly'):
         True if the year is a 27 payday year, False if not.
     """
     new_years_day = date(year, 1, 1)
+    jan_2 = date(year, 1, 2)
     freq_in_days = 7 if frequency == 'weekly' else 14
     # Determine if new year's day is a payday.
     # If new year's day is a payday, then it's always a 27 payday year.
     if abs((payday - new_years_day).days) % freq_in_days == 0:
         result = True
     # Handle leap years - Jan. 2 can also be a payday.
-    elif (year % 4 == 0) and (abs((payday - date(year, 1, 2)).days) % freq_in_days == 0):
+    elif (year % 4 == 0) and (abs((payday - jan_2).days) % freq_in_days == 0):
         result = True
     else:
         result = False
