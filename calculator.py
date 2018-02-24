@@ -10,13 +10,13 @@ def is_payday_leap_year(year, payday, frequency='biweekly'):
 
     Args:
         year (int): The year we're testing.
-        payday (date): A payday from the biweekly pay calendar.
+        payday (date): A payday from the specified pay calendar.
             Does not need to be in the same year as `year`.
         frequency (str): Pay frequency. Valid values are 'weekly'
             or 'biweekly'. Default is 'biweekly'.
 
     Returns:
-        True if the year is a 27 payday year, False if not.
+        True if the year is a payday leap year, False if not.
     """
     new_years_day = date(year, 1, 1)
     jan_2 = date(year, 1, 2)
