@@ -31,3 +31,14 @@ def is_payday_leap_year(year, payday, frequency='biweekly'):
     else:
         result = False
     return result
+
+if __name__ == '__main__':
+    year = 2018
+    # January 11, 2018
+    payday = date(2018, 1, 11)
+    for i in range(51):
+        print("{0} is a payday leap year: {1}".format(
+            year, is_payday_leap_year(year, payday)
+        ))
+        year += 1
+
