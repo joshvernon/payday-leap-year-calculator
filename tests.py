@@ -1,9 +1,9 @@
 import unittest
 from datetime import date
 
-from calculator import is_payday_leap_year
+from calculator import is_payday_leap_year, get_payday_leap_years
 
-class CalculatorTestCase(unittest.TestCase):
+class IsPaydayLeapYearTestCase(unittest.TestCase):
 
     def test_thursday_2018_is_false(self):
         payday = date(2018, 1, 11)
@@ -43,6 +43,30 @@ class CalculatorTestCase(unittest.TestCase):
         self.assertTrue(is_payday_leap_year(2015, payday, 'not_valid'))
         # Would be True for weekly - checking this doesn't happen.
         self.assertFalse(is_payday_leap_year(2020, payday, 'not_valid'))
+
+class GetPaydayLeapYearsTestCase(unittest.TestCase):
+    
+    def test_7_26_2018_returns_correct_years(self):
+        payday = date(2018, 7, 26)
+        expected = [2026, 2037, 2048, 2060, 2071]
+        results = get_payday_leap_years(payday)
+        self.assertEqual(results, expected)
+    
+    def test_7_26_2018_returns_correct_years_weekly_frequency(self):
+        payday = date(2018, 7, 26)
+        expected = [2020, 2026, 2032, 2037, 2043]
+        results = get_payday_leap_years(payday, frequency='weekly')
+        self.assertEqual(results, expected)
+
+    def test_non_default_count(self):
+        payday = date(2018, 7, 26)
+        results = get_payday_leap_years(payday, count=10)
+        self.assertEqual(len(results), 10)
+
+    def test_zero_count_returns_empty_result_set(self):
+        payday = date(2018, 7, 26)
+        results = get_payday_leap_years(payday, count=0)
+        self.assertEqual(len(results), 0)
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

@@ -32,6 +32,30 @@ def is_payday_leap_year(year, payday, frequency='biweekly'):
         result = False
     return result
 
+def get_payday_leap_years(payday, frequency='biweekly', count=5):
+    """Get the next n payday leap years.
+
+    Return a list of the next n payday leap years, where n is specified
+    by `count`.
+
+    Args:
+        payday (date): A payday from the specified pay calendar.
+        frequency (str): Pay frequency. Valid values are 'weekly'
+            or 'biweekly'. Default is 'biweekly'.
+        count (int): The number of payday leap years to return. Default is 5.
+
+    Returns:
+        A list of ints.
+    """
+    results = []
+    # Start counting from the current year.
+    year = date.today().year
+    while len(results) < count:
+        if is_payday_leap_year(year, payday, frequency):
+            results.append(year)
+        year += 1
+    return results
+
 if __name__ == '__main__':
     year = 2018
     # January 11, 2018
@@ -41,4 +65,3 @@ if __name__ == '__main__':
             year, is_payday_leap_year(year, payday)
         ))
         year += 1
-
