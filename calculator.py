@@ -32,6 +32,9 @@ def is_payday_leap_year(year, payday, frequency='biweekly'):
         result = False
     return result
 
+def get_payday_leap_years():
+    pass
+
 if __name__ == '__main__':
     year = 2018
     # January 11, 2018
