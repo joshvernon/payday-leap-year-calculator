@@ -13,7 +13,7 @@ class YearResource:
         self.frequency = 'biweekly'
         self.payday = date.today()
 
-    def on_request(self, req, resp, *, year):
+    def on_get(self, req, resp, *, year):
         # Validate and process input.
         is_input_valid, error = self._validate_input(year, req.params)
 
