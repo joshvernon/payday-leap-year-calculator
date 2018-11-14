@@ -68,5 +68,10 @@ class GetPaydayLeapYearsTestCase(unittest.TestCase):
         results = get_payday_leap_years(payday, count=0)
         self.assertEqual(len(results), 0)
 
+    def test_non_default_starting_year(self):
+        payday = date(2018, 7, 26)
+        results = get_payday_leap_years(payday, starting_year=2000)
+        self.assertIn(2004, results)
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

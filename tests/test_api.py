@@ -5,6 +5,15 @@ import api as service
 def api():
     return service.api
 
+### Testing "/years"
+
+@pytest.mark.xfail
+def test_2037_is_in_years_collection(api):
+    r = api.requests.get('/years?payday=2018-01-11')
+    assert 2037 in r.json()['paydayLeapYears']
+
+### Testing "/years/{year}"
+
 def test_thursday_2015_biweekly_is_true(api):
     r = api.requests.get('/years/2015?payday=2018-01-11')
     assert r.json()['isPaydayLeapYear'] is True
@@ -21,6 +30,10 @@ def test_valid_request_has_no_error_returned(api):
     r = api.requests.get('/years/2015?payday=2018-01-11')
     with pytest.raises(KeyError):
         r.json()['error']
+
+def test_extraneous_query_params_have_no_effect(api):
+    r = api.requests.get('/years/2015?payday=2018-01-11&foo=bar&baz=hello')
+    assert r.json()['isPaydayLeapYear'] is True
 
 # Exception tests
 def test_invalid_year_returns_400(api):
