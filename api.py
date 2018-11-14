@@ -1,4 +1,5 @@
 from datetime import date
+import sys
 
 import responder
 import calculator
@@ -6,44 +7,45 @@ import calculator
 api = responder.API()
 
 
-@api.route(before_request=True)
-def validate_params(req, resp):
-    if req.params:
-        try:
-            if 'payday' in req.params:
-                payday = date.fromisoformat(req.params['payday'])
-            if 'frequency' in req.params:
-                frequency = req.params['frequency']
-            if 'count' in req.params:
-                count = int(req.params['count'])
-            if 'startYear' in req.params:
-                start_year = int(req.params['startYear'])
-        except:
-            resp.media = {'error': 'Invalid parameter value'}
-            resp.status_code = 400
+def validate_params(**kwargs):
+    try:
+        validated_params = {}
+        if 'payday' in kwargs:
+            validated_params['payday'] = date.fromisoformat(kwargs['payday'][0])
+        else:
+            validated_params['payday'] = date.today()
+        if 'frequency' in kwargs:
+            validated_params['frequency'] = kwargs['frequency'][0]
+        else:
+            validated_params['frequency'] = 'biweekly'
+        if 'count' in kwargs:
+            validated_params['count'] = int(kwargs['count'][0])
+        else:
+            validated_params['count'] = 5
+        if 'startYear' in kwargs:
+            validated_params['start_year'] = int(kwargs['startYear'][0])
+        else:
+            validated_params['start_year'] = date.today().year
+        return validated_params
+    except Exception as e:
+        print(e)
+        raise ValidationException()
 
 
 @api.route("/years")
 def years_collection(req, resp):
-    payday = date.today()
-    frequency = 'biweekly'
-    count = 5
-    start_year = date.today().year
-    if req.params:
-        try:
-            if 'payday' in req.params:
-                payday = date.fromisoformat(req.params['payday'])
-            if 'frequency' in req.params:
-                frequency = req.params['frequency']
-            if 'count' in req.params:
-                count = int(req.params['count'])
-            if 'startYear' in req.params:
-                start_year = int(req.params['startYear'])
-        except:
-            resp.media = {'error': 'Invalid parameter value'}
-            resp.status_code = 400
-    results = calculator.get_payday_leap_years(payday, frequency, count, start_year)
-    resp.media = {'paydayLeapYears': results}
+    try:
+        validated_params = validate_params(**req.params)
+        results = calculator.get_payday_leap_years(
+            validated_params['payday'],
+            validated_params['frequency'],
+            validated_params['count'],
+            validated_params['start_year']
+        )
+        resp.media = {'paydayLeapYears': results}
+    except ValidationException:
+        resp.media = {'error': 'Invalid parameter value'}
+        resp.status_code = 400
 
 
 # @api.route("/years/{year}")
@@ -96,6 +98,10 @@ def years_collection(req, resp):
 #         else:
 #             resp.media = {'error': validator.error_message}
 #             resp.status_code = 400
+
+
+class ValidationException(Exception):
+    pass
 
 
 class ParameterValidator:
