@@ -3,8 +3,8 @@ from datetime import date
 
 from calculator import is_payday_leap_year, get_payday_leap_years
 
-class IsPaydayLeapYearTestCase(unittest.TestCase):
 
+class IsPaydayLeapYearTestCase(unittest.TestCase):
     def test_thursday_2018_is_false(self):
         payday = date(2018, 1, 11)
         self.assertFalse(is_payday_leap_year(2018, payday))
@@ -44,8 +44,8 @@ class IsPaydayLeapYearTestCase(unittest.TestCase):
         # Would be True for weekly - checking this doesn't happen.
         self.assertFalse(is_payday_leap_year(2020, payday, 'not_valid'))
 
+
 class GetPaydayLeapYearsTestCase(unittest.TestCase):
-    
     def test_7_26_2018_returns_correct_years(self):
         payday = date(2018, 7, 26)
         expected = [2026, 2037, 2048, 2060, 2071]
