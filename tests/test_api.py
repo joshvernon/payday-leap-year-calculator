@@ -7,10 +7,17 @@ def api():
 
 ### Testing "/years"
 
-@pytest.mark.xfail
 def test_2037_is_in_years_collection(api):
     r = api.requests.get('/years?payday=2018-01-11')
     assert 2037 in r.json()['paydayLeapYears']
+
+def test_non_default_count(api):
+    r = api.requests.get('/years?payday=2018-01-11&count=10')
+    assert len(r.json()['paydayLeapYears']) == 10
+
+def test_non_default_start_year(api):
+    r = api.requests.get('/years?payday=2018-01-11&startYear=1992')
+    assert 2004 in r.json()['paydayLeapYears']
 
 ### Testing "/years/{year}"
 
@@ -42,12 +49,12 @@ def test_invalid_year_returns_400(api):
 
 def test_invalid_year_error_message(api):
     r = api.requests.get('/years/foo')
-    assert r.json()['error'] == 'Invalid value: foo'
+    assert r.json()['error'] == 'Invalid parameter value'
 
 def test_invalid_payday_format_returns_400(api):
     r = api.requests.get('/years/2015?payday=01/11/2018')
     assert r.status_code == 400
 
-def test_invalid_frequency_returns_400(api):
-    r = api.requests.get('/years/2015?payday=2018-01-11&frequency=monthly')
+def test_invalid_payday_format_years_resource(api):
+    r = api.requests.get('/years?payday=01/11/2018')
     assert r.status_code == 400
