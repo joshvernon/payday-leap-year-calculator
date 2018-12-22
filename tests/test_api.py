@@ -42,7 +42,8 @@ def test_extraneous_query_params_have_no_effect(api):
     r = api.requests.get('/years/2015?payday=2018-01-11&foo=bar&baz=hello')
     assert r.json()['isPaydayLeapYear'] is True
 
-# Exception tests
+### Exception tests
+
 def test_invalid_year_returns_400(api):
     r = api.requests.get('/years/foo')
     assert r.status_code == 400
@@ -58,3 +59,7 @@ def test_invalid_payday_format_returns_400(api):
 def test_invalid_payday_format_years_resource(api):
     r = api.requests.get('/years?payday=01/11/2018')
     assert r.status_code == 400
+
+def test_post_year_resource_returns_405(api):
+    r = api.requests.post('/years/2020?payday=2018-01-11&frequency=weekly')
+    assert r.status_code == 405

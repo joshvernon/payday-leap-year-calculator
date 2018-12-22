@@ -19,12 +19,15 @@ def get_years_collection(req, resp):
         resp.media = {'paydayLeapYears': results}
     except ValidationException:
         resp.media = {'error': 'Invalid parameter value'}
-        resp.status_code = 400
+        resp.status_code = api.status_codes.HTTP_400
 
 
 @api.route("/years/{year}")
 def get_year_resource(req, resp, *, year):
     try:
+        if req.method != 'get':
+            resp.status_code = api.status_codes.HTTP_405
+            return
         validated_params = validate_params(startYear=(year,), **req.params)
         print(validated_params)
         result = calculator.is_payday_leap_year(
@@ -35,7 +38,7 @@ def get_year_resource(req, resp, *, year):
         resp.media = {'isPaydayLeapYear': result}
     except ValidationException:
         resp.media = {'error': 'Invalid parameter value'}
-        resp.status_code = 400
+        resp.status_code = api.status_codes.HTTP_400
 
 
 def validate_params(**kwargs):
