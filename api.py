@@ -1,64 +1,73 @@
 from datetime import date
 
 import responder
-
 import calculator
 
 api = responder.API()
 
+
+@api.route("/years")
+def get_years_collection(req, resp):
+    try:
+        validated_params = validate_params(**req.params)
+        results = calculator.get_payday_leap_years(
+            validated_params['payday'],
+            frequency=validated_params['frequency'],
+            count=validated_params['count'],
+            starting_year=validated_params['year']
+        )
+        resp.media = {'paydayLeapYears': results}
+    except ValidationException:
+        resp.media = {'error': 'Invalid parameter value'}
+        resp.status_code = api.status_codes.HTTP_400
+
+
 @api.route("/years/{year}")
-class YearResource:
+def get_year_resource(req, resp, *, year):
+    try:
+        if req.method != 'get':
+            resp.status_code = api.status_codes.HTTP_405
+            return
+        validated_params = validate_params(startYear=(year,), **req.params)
+        print(validated_params)
+        result = calculator.is_payday_leap_year(
+            validated_params['year'],
+            validated_params['payday'],
+            frequency=validated_params['frequency']
+        )
+        resp.media = {'isPaydayLeapYear': result}
+    except ValidationException:
+        resp.media = {'error': 'Invalid parameter value'}
+        resp.status_code = api.status_codes.HTTP_400
 
-    def __init__(self):
-        self.frequency = 'biweekly'
-        self.payday = date.today()
 
-    def on_request(self, req, resp, *, year):
-        # Validate and process input.
-        is_input_valid, error = self._validate_input(year, req.params)
-
-        if is_input_valid:
-            # Determine if the year is a payday leap year.
-            result = calculator.is_payday_leap_year(
-                int(year),
-                self.payday,
-                self.frequency,
-            )
-            resp.media = {'isPaydayLeapYear': result}
+def validate_params(**kwargs):
+    try:
+        validated_params = {}
+        if 'payday' in kwargs:
+            validated_params['payday'] = date.fromisoformat(kwargs['payday'][0])
         else:
-            resp.media = {'error': error}
-            resp.status_code = 400
+            validated_params['payday'] = date.today()
+        if 'frequency' in kwargs:
+            validated_params['frequency'] = kwargs['frequency'][0]
+        else:
+            validated_params['frequency'] = 'biweekly'
+        if 'count' in kwargs:
+            validated_params['count'] = int(kwargs['count'][0])
+        else:
+            validated_params['count'] = 5
+        if 'startYear' in kwargs:
+            validated_params['year'] = int(kwargs['startYear'][0])
+        else:
+            validated_params['year'] = date.today().year
+        return validated_params
+    except:
+        raise ValidationException()
 
-    def _validate_input(self, year, params):
-        is_input_valid = True
-        error = ''
 
-        try:
-            int(year)
-        except:
-            error = 'Invalid year'
-            is_input_valid = False
-        
-        try:
-            if params['payday']:
-                try:
-                    payday = date.fromisoformat(params['payday'])
-                    self.payday = payday
-                except:
-                    error = 'Invalid payday format'
-                    is_input_valid = False
-            
-            if params['frequency']:
-                frequency = params['frequency']
-                if not frequency in ('weekly', 'biweekly'):
-                    error = 'Invalid frequency. Valid values are weekly or biweekly'
-                    is_input_valid = False
-                else:
-                    self.frequency = frequency
-        except KeyError:
-            pass
-        
-        return is_input_valid, error
+class ValidationException(Exception):
+    pass
+
 
 if __name__ == '__main__':
     api.run()
