@@ -23,7 +23,7 @@ Example response:
 | startYear | no        | The year to start counting from. The default is the current year.            |
 
 
-## GET /years/`{year}`
+## GET /years/{year}
 Returns whether or not the given `year` is a payday leap year.
 
 Example request:
